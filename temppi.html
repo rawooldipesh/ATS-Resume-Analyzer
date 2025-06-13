@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #2c3e50; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 5px 0; }
+        .response-container { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #f9f9f9;  margin-top: 70px; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>Resume Analyzer</h1>
+<form id="upload-form" enctype="multipart/form-data">
+    <label for="resume">Upload Resume:</label>
+    <input type="file" name="resume" id="resume" required>
+    
+    <label for="job_description">Job Description (Optional):</label>
+    <textarea name="job_description" id="job_description" rows="4" placeholder="Paste job description here..."></textarea>
+    
+    <label for="analysis_option">Select Analysis Option:</label>
+    <select name="analysis_option" id="analysis_option">
+        <option value="Quick Scan">Quick Scan</option>
+        <option value="Detailed Analysis">Detailed Analysis</option>
+        <option value="ATS Optimization">ATS Optimization</option>
+    </select>
+    
+    <button type="submit">Analyze Resume</button>
+</form>
+
+<div id="analysis-result" class="response-container">
+    <!-- Add  index.html inside the <body> tag -->
+        <div id="loading" style="display: none;">
+            <p>Loading...</p>
+            <!-- You can also use a spinner like this (optional) -->
+            <div class="spinner" style="display: inline-block; width: 50px; height: 50px; border: 6px solid #f3f3f3; display: flex;justify-content: center ;margin-left: 48%;border-top: 6px solid #3498db; border-radius: 50%; animation: spin 2s linear infinite;"></div>
+        </div>
+        
+        <!-- Adding css for loading spinner -->
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+</div>
+<div id="error-message" class="error"></div>
+
+
+    
+
+<script>
+    document.getElementById('upload-form').onsubmit = async function(event) {
+        event.preventDefault();
+        
+        let formData = new FormData();
+        formData.append('resume', document.getElementById('resume').files[0]);
+        formData.append('job_description', document.getElementById('job_description').value);
+        formData.append('analysis_option', document.getElementById('analysis_option').value);
+
+        try {
+            let response = await fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            });
+            
+            let data = await response.json();
+            
+            if (response.ok) {
+                document.getElementById('analysis-result').innerHTML = data.analysis_result;
+                document.getElementById('error-message').style.display = 'none';
+            } else {
+                document.getElementById('analysis-result').innerHTML = '';
+                document.getElementById('error-message').textContent = data.error;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        } catch (error) {
+            document.getElementById('analysis-result').innerHTML = '';
+            document.getElementById('error-message').textContent = 'An error occurred. Please try again.';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    };
+
+    document.getElementById('upload-form').onsubmit = async function(event) {
+        event.preventDefault();
+        
+        // Show the loading spinner
+        document.getElementById('loading').style.display = 'block';
+        
+        let formData = new FormData();
+        formData.append('resume', document.getElementById('resume').files[0]);
+        formData.append('job_description', document.getElementById('job_description').value);
+        formData.append('analysis_option', document.getElementById('analysis_option').value);
+
+        try {
+            let response = await fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            });
+            
+            let data = await response.json();
+            
+            if (response.ok) {
+                // Hide the loading spinner and display the result
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('analysis-result').innerHTML = data.analysis_result;
+                document.getElementById('error-message').style.display = 'none';
+            } else {
+                // Hide the loading spinner and show error
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('analysis-result').innerHTML = '';
+                document.getElementById('error-message').textContent = data.error;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        } catch (error) {
+            // Hide the loading spinner and show a generic error message
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('analysis-result').innerHTML = '';
+            document.getElementById('error-message').textContent = 'An error occurred. Please try again.';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    };
+
+</script>
+
+</body>
+</html>

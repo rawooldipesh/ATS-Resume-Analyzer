@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            position: relative;
+            transition: background 0.3s, color 0.3s;
+            background: url("{{ url_for('static', filename='background.jpg') }}") no-repeat center center/cover;
+        }
+        /* AI Suggestions Box */
+        /* AI Suggestions Box */
+        .ai-suggestions-box {
+            display: none;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            background: var(--container-bg); /* Use theme-based background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1000;
+            color: var(--text-color); /* Use theme-based text color */
+        }
+        
+        /* Dark Mode Fix for AI Suggestions */
+        .dark-mode .ai-suggestions-box {
+            background: rgba(42, 42, 42, 0.9); /* Dark mode background */
+            color: white; /* Ensure text is readable */
+        }
+        
+
+    /* Exit Button */
+    .exit-btn {
+        background: red;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+        margin-bottom: 10px;
+    }
+
+    .exit-btn:hover {
+        background: darkred;
+    }
+
+        /* Dark Overlay Effect for Readability */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1; /* Fix to prevent blocking clicks */
+        }
+
+        /* Light & Dark Mode Variables */
+        :root {
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+            --button-bg: #007bff;
+            --button-hover: #0056b3;
+            --input-bg: white;
+        }
+
+        .dark-mode {
+            --container-bg: rgba(42, 42, 42, 0.9);
+            --text-color: #ffffff;
+            --button-bg: #17a2b8;
+            --button-hover: #138496;
+            --input-bg: #3a3a3a;
+        }
+
+        /* Container Styling */
+        .container {
+            width: 50%;
+            padding: 25px;
+            background: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: background 0.3s;
+        }
+
+        input[type="file"] {
+            display: block;
+            margin: 10px auto;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: var(--button-hover);
+        }
+
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .file-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Positioning for Auth Links & Dark Mode Button */
+        .auth-links {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            z-index: 3;
+        }
+
+        .auth-links a {
+            padding: 8px 12px;
+            background: var(--button-bg);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .auth-links a:hover {
+            background: var(--button-hover);
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 5px;
+        }
+
+        .dark-mode-toggle:hover {
+            background: var(--button-hover);
+        }
+    </style>
+</head>
+<body id="body">
+
+    <!-- Authentication Links & Dark Mode Toggle -->
+    <div class="auth-links">
+        {% if current_user.is_authenticated %}
+            <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+        <button class="dark-mode-toggle" id="dark-mode-toggle">🌙 Dark Mode</button>
+    </div>
+
+    <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <h2>Upload Your Resume</h2>
+
+        <!-- File Upload Form -->
+        <form method="post" action="/predict" enctype="multipart/form-data">
+            <div class="file-container">
+                <input type="file" name="resume" required>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+
+        <!-- Show Results -->
+        {% if prediction is not none %}
+            <div class="results">
+                <h3>Results</h3>
+                <p><strong>ATS Score:</strong> {{ prediction }}</p>
+                <p><strong>Recommended Job Roles:</strong></p>
+                <p>{{ job_roles }}</p>
+
+                {% if extracted_info %}
+                    <h4>Extracted Information</h4>
+                    <p><strong>Name:</strong> {{ extracted_info['Name'] }}</p>
+                    <p><strong>Email:</strong> {{ extracted_info['Email'] }}</p>
+                    <p><strong>Skills:</strong> {{ extracted_info['Skills'] }}</p>
+                {% endif %}
+
+                <!-- AI Suggestions Button (Hidden Initially) -->
+                <button id="generate-suggestions" style="display: block;">Generate AI Suggestions</button>
+                
+                <!-- Loading Animation -->
+                <div id="loading" style="display: none; margin-top: 10px;">
+                 <p>⏳ Generating suggestions... Please wait.</p>
+                </div>
+
+                <!-- AI Suggestions Section (Initially Hidden) -->
+            <div id="ai-suggestions-box" class="ai-suggestions-box">
+            <button class="exit-btn" onclick="hideSuggestions()">✖ Close</button>
+            <h3>AI-Powered Resume Suggestions</h3>
+            <p id="suggestions-text">Click the button above to generate suggestions.</p>
+            </div>
+
+        {% endif %}
+    </div>
+
+    <!-- JavaScript for AI Suggestions -->
+    <script>
+        document.getElementById("generate-suggestions").addEventListener("click", function () {
+            document.getElementById("loading").style.display = "block"; // Show loading
+            document.getElementById("ai-suggestions-box").style.display = "none";  // Hide previous results
+        
+            fetch("/generate_suggestions")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("loading").style.display = "none"; // Hide loading
+                    document.getElementById("suggestions-text").innerText = data.suggestions;
+                    document.getElementById("ai-suggestions-box").style.display = "block";
+                })
+                .catch(error => {
+                    document.getElementById("loading").style.display = "none"; // Hide loading
+                    document.getElementById("suggestions-text").innerText = "Error: AI suggestions failed to load.";
+                    console.error("Error fetching AI suggestions:", error);
+                });
+               
+                
+        });
+        function hideSuggestions() {
+            document.getElementById("ai-suggestions-box").style.display = "none";
+        }
+        
+</script>
+
+    <!-- Dark Mode Script -->
+    <script>
+        const darkModeToggle = document.getElementById("dark-mode-toggle");
+        const body = document.getElementById("body");
+
+        if (localStorage.getItem("darkMode") === "enabled") {
+            body.classList.add("dark-mode");
+            darkModeToggle.innerText = "☀️ Light Mode";
+        }
+
+        darkModeToggle.addEventListener("click", function () {
+            body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", body.classList.contains("dark-mode") ? "enabled" : "disabled");
+            darkModeToggle.innerText = body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+        });
+    </script>
+
+</body>
+</html>

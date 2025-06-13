@@ -1,0 +1,51 @@
+ID,Resume Text,Job Role,ATS Score
+1,"Experienced data scientist skilled in Python, SQL, TensorFlow, and machine learning.",Data Scientist,85
+2,"Software engineer with 7 years of experience in full-stack development using JavaScript, React, and Node.js.",Full-Stack Developer,88
+3,"Marketing professional with expertise in SEO, Google Ads, content strategy, and social media campaigns.",Marketing Specialist,81
+4,"Project manager experienced in agile methodologies, risk management, and team leadership.",Project Manager,66
+5,"AI research scientist with knowledge in deep learning, NLP, and computer vision.",AI Research Scientist,73
+6,"Cybersecurity analyst specializing in threat detection, ethical hacking, and network security.",Cybersecurity Analyst,86
+7,"Cloud engineer proficient in AWS, Azure, DevOps, and Kubernetes.",Cloud Engineer,60
+8,"HR manager with expertise in talent acquisition, employee engagement, and organizational development.",HR Manager,67
+9,"Graphic designer skilled in Adobe Photoshop, Illustrator, UX/UI, and branding.",Graphic Designer,78
+10,"Data analyst proficient in SQL, Tableau, Power BI, and statistical analysis.",Data Analyst,76
+11,"Front-end developer with experience in JavaScript, Vue.js, CSS, and responsive design.",Front-End Developer,91
+12,"Back-end developer skilled in Java, Spring Boot, REST APIs, and microservices.",Back-End Developer,72
+13,"Network engineer with expertise in routing, firewalls, VPNs, and network architecture.",Network Engineer,63
+14,"Content writer with experience in blogging, copywriting, and technical documentation.",Content Writer,74
+15,"Mobile app developer with skills in Swift, Kotlin, and Flutter for Android/iOS.",Mobile App Developer,62
+16,"IT support specialist experienced in troubleshooting, help desk support, and IT security.",IT Support Specialist,63
+17,"Blockchain developer with expertise in smart contracts, Ethereum, and Solidity.",Blockchain Developer,92
+18,"Electrical engineer skilled in circuit design, embedded systems, and MATLAB.",Electrical Engineer,74
+19,"Mechanical engineer with experience in CAD, SolidWorks, and industrial automation.",Mechanical Engineer,68
+20,"Biomedical engineer specializing in medical imaging, prosthetics, and biotechnology.",Biomedical Engineer,90
+21,"Operations manager with experience in logistics, supply chain, and strategic planning.",Operations Manager,95
+22,"QA tester with skills in automation testing, Selenium, and software debugging.",QA Tester,80
+23,"UX/UI designer proficient in wireframing, prototyping, and user experience research.",UX/UI Designer,63
+24,"Game developer with expertise in Unity, Unreal Engine, and C# programming.",Game Developer,90
+25,"Database administrator skilled in MySQL, PostgreSQL, and database optimization.",Database Administrator,92
+26,"Social media manager with expertise in campaign strategy, influencer marketing, and analytics.",Social Media Manager,70
+27,"Cybersecurity consultant experienced in penetration testing, risk analysis, and compliance.",Cybersecurity Consultant,80
+28,"Cloud architect specializing in hybrid cloud environments, CI/CD pipelines, and infrastructure as code.",Cloud Architect,76
+29,"Data engineer proficient in ETL, Hadoop, Apache Spark, and data pipelines.",Data Engineer,76
+30,"DevOps engineer with experience in Docker, Kubernetes, Jenkins, and CI/CD automation.",DevOps Engineer,66
+31,"Technical writer skilled in documentation, API writing, and user manuals.",Technical Writer,80
+32,"AI chatbot developer with expertise in NLP, conversational AI, and chatbot frameworks.",AI Chatbot Developer,82
+33,"Business analyst experienced in requirement gathering, stakeholder communication, and reporting.",Business Analyst,68
+34,"SEO specialist with expertise in keyword research, on-page SEO, and analytics.",SEO Specialist,87
+35,"Robotics engineer with experience in autonomous systems, ROS, and robotic control systems.",Robotics Engineer,85
+36,"Machine learning engineer proficient in Scikit-Learn, TensorFlow, and AI model deployment.",Machine Learning Engineer,91
+37,"Security engineer specializing in endpoint security, threat analysis, and security automation.",Security Engineer,80
+38,"E-commerce specialist with skills in Shopify, WooCommerce, and conversion optimization.",E-Commerce Specialist,87
+39,"Cloud security engineer focusing on IAM, threat detection, and compliance monitoring.",Cloud Security Engineer,75
+40,"Data privacy consultant with expertise in GDPR, CCPA, and data governance.",Data Privacy Consultant,88
+41,"AI ethics researcher studying fairness, bias, and responsible AI development.",AI Ethics Researcher,81
+42,"Embedded systems engineer working with IoT, real-time OS, and firmware development.",Embedded Systems Engineer,92
+43,"Legal consultant with experience in contract law, compliance, and corporate governance.",Legal Consultant,67
+44,"Financial analyst specializing in risk assessment, portfolio management, and financial modeling.",Financial Analyst,86
+45,"Healthcare administrator with expertise in medical billing, hospital operations, and patient management.",Healthcare Administrator,81
+46,"Creative director leading brand strategy, visual storytelling, and marketing campaigns.",Creative Director,68
+47,Digital transformation consultant helping businesses optimize processes using AI and automation.,Digital Transformation Consultant,94
+48,Risk management specialist with experience in regulatory compliance and fraud prevention.,Risk Management Specialist,89
+49,"Supply chain analyst skilled in logistics optimization, demand forecasting, and inventory management.",Supply Chain Analyst,94
+50,Software architect experienced in designing scalable applications and cloud solutions.,Software Architect,73
