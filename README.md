@@ -32,15 +32,25 @@ A smart Resume Analysis web app that predicts ATS scores, suggests job roles , a
 
 Advanced-ATS/
 ├── app.py # Main Flask application
+
 ├── utils.py # Resume preprocessing, NLP helpers
+
 ├── model.py # ML model training code
+
 ├── extract_keywords.py # Keyword & PDF parser
+
 ├── templates/ # HTML templates
+
 ├── static/ # CSS/JS/images
+
 ├── models/ # Saved .joblib models
+
 ├── uploads/ # Uploaded PDFs (runtime only)
+
 ├── refined_data.csv # Final dataset used for training
+
 ├── requirements.txt # Python dependencies
+
 └── README.md # Project description
 
 ---
