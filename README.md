@@ -1,59 +1,94 @@
-# Advanced-ATS-Resume-Checker
+# ATS Resume Analyzer 🔍📄
+
+A smart Resume Analysis web app that predicts ATS scores, suggests job roles , and offers   AI-powered resume improvement suggestions   — built using   Flask + ML + NLP + Google Gemini  .
+
+---
+
+## 🚀 Features
+
+- ✅ ATS Score Prediction (0–10)
+- ✅ Job Role Prediction from Resume Text
+- ✅ AI-Powered Resume Suggestions (via Gemini 1.5 Pro)
+- ✅ PDF Resume Parsing (Name, Email, Skills, Education)
+- ✅ Secure Login System
+- ✅ HR Dashboard: Filter, Sort, View & Download Resumes
+- ✅ Responsive Web Design (HTML, CSS, Bootstrap)
+
+---
+
+## 🛠️ Tech Stack
+
+-   Frontend  : HTML, CSS, JavaScript 
+-   Backend  : Python (Flask)
+-   Machine Learning  : RandomForest, Logistic Regression
+-   NLP  : NLTK
+-   PDF Parsing  : PyPDF2
+-   AI Suggestions  : Google Gemini API
+-   Authentication  : Flask-Login
+
+---
+
+## 📁 Project Structure
+
+Advanced-ATS/
+├── app.py # Main Flask application
+├── utils.py # Resume preprocessing, NLP helpers
+├── model.py # ML model training code
+├── extract_keywords.py # Keyword & PDF parser
+├── templates/ # HTML templates
+├── static/ # CSS/JS/images
+├── models/ # Saved .joblib models
+├── uploads/ # Uploaded PDFs (runtime only)
+├── refined_data.csv # Final dataset used for training
+├── requirements.txt # Python dependencies
+└── README.md # Project description
+
+---
+
+## 💻 How to Run Locally
+
+git clone https://github.com/rawooldipesh/ATS-RESUME-ANALYZER.git
+cd ATS-RESUME-ANALYZER
+
+# Create virtual env (optional but recommended)
+python -m venv venv
+venv\Scripts\activate        # On Windows
+source venv/bin/activate     # On macOS/Linux
+
+pip install -r requirements.txt
+python app.py
+Open browser → http://localhost:5000
+
+🌐 Live Demo (Coming Soon)
+🔗 https://ats-resume.onrender.com (To be deployed)
+
+## 📷 Screenshots
+
+### 🏠 Home Page
+![Home Page](static/images/home.png)
+
+### 🔐 Login Page
+![Login Page](static/images/login.png)
+
+### 📄 Resume Prediction
+![Prediction Result](static/images/results.png)
+
+### 💡 AI Suggestions
+![AI Suggestions](static/images/ai_suggestions.png)
 
 
-![image](https://github.com/user-attachments/assets/f915239c-efa0-40dd-967d-d72fc0506ca0)
+🧠 AI Suggestions Powered By
+Integrated with Gemini-2.0-Flash (Google Generative AI) to provide personalized resume improvement tips to help job seekers get noticed.
 
-### What's This All About?
+📌 Future Enhancements
+📊 Analytics Dashboard for HRs
+🔁 Feedback system for improving suggestions
 
-75% of resumes never reach human eyes. They're killed by ATS (Applicant Tracking Systems).
+📜 License
+MIT License
 
-ResumeATS Pro is here to change that game.
+🤝 Connect With Me
+📧 rawooldipesh0@gmail.com
+🔗 https://www.linkedin.com/in/dipesh-rawool
 
-### What Does It Do?
 
-1. Analyzes resumes like an ATS would
-2. Gives actionable feedback
-3. Helps optimize resumes for ATS approval
-4. Provides a chat feature for personalized advice
-
-### Why Should You Care?
-
-- If you're a job seeker: This tool could be your ticket to more interviews
-- If you're a developer: You can help change lives (and maybe land a cool job yourself)
-
-### Tech Stack
-
-- Frontend: Streamlit
-- AI Brain: Google's Generative AI
-- PDF Handling: PyPDF2
-
-### How to Use
-
-1. Clone this repo
-2. Install dependencies: `pip install -r requirements.txt`
-3. Set up your Google API key in a `.env` file
-4. Run with: `streamlit run app.py`
-
-### Want to Contribute?
-
-Hell yeah! Here's how:
-
-1. Fork the repo
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
-
-### License
-
-MIT License. See `LICENSE` for more information.
-
-### Questions?
-
-Hit me up in the issues or at [mayankjainsikar1999@gmail.com].
-
-### Remember
-
-You're not just coding. You're changing lives. One resume at a time.
-
-Now go build something awesome! 
