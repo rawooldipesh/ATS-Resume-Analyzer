@@ -31,6 +31,7 @@ A smart Resume Analysis web app that predicts ATS scores, suggests job roles , a
 ## 📁 Project Structure
 
 Advanced-ATS/
+
 ├── app.py # Main Flask application
 
 ├── utils.py # Resume preprocessing, NLP helpers
