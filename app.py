@@ -9,6 +9,13 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import preprocess_text  
 from extract_keywords import extract_keywords  
+import nltk
+
+# Download punkt if not already present
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
 # Initialize Flask App
 app = Flask(__name__)
