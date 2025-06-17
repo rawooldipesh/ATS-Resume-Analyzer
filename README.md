@@ -73,6 +73,10 @@ Open browser → http://localhost:5000
 🌐 Live Demo (Coming Soon)
 🔗 https://ats-resume-analyzer-btmx.onrender.com (check on Computer/Laptop only -not mobile friendly)
 
+⚠️ Note on Hosting & Performance
+This application is currently deployed on Render, a free-tier hosting service. Occasionally, you may experience delays or errors due to cold starts or resource limitations when multiple requests are handled simultaneously.
+
+If the app doesn’t respond immediately, please wait a few moments and try again — the server may be waking up from idle or handling another request. For the best experience, consider deploying the app on Hugging Face Spaces or a more scalable platform.
 ## 📷 Screenshots
 
 ### 🏠 Home Page
