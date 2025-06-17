@@ -71,7 +71,7 @@ python app.py
 Open browser → http://localhost:5000
 
 🌐 Live Demo (Coming Soon)
-🔗 https://ats-resume-analyzer-btmx.onrender.com (To be deployed)
+🔗 https://ats-resume-analyzer-btmx.onrender.com (check on Computer/Laptop only -not mobile friendly)
 
 ## 📷 Screenshots
 
