@@ -3,5 +3,5 @@
 # Install dependencies
 pip install -r requirements.txt
 
-# Download NLTK data to custom path inside the project
-python -m nltk.downloader -d ./nltk_data punkt stopwords wordnet
+# Force download all required NLTK tokenizers to a known directory
+python -m nltk.downloader -d ./nltk_data punkt punkt_tab stopwords wordnet
