@@ -4,14 +4,15 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
+nltk.data.path.append('./nltk_data')  # ✅ Add this for Render
+
+# Download locally if needed (optional)
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-# Initialize Lemmatizer
 lemmatizer = WordNetLemmatizer()
 
-# Preprocessing function
 def preprocess_text(text):
     text = text.lower()
     text = text.translate(str.maketrans('', '', string.punctuation))
