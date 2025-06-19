@@ -17,56 +17,49 @@ SKILLS = {
     "Software Development", "Networking", "Database Administration", "Cyber Threat Analysis"
 }
 
-IGNORE_WORDS = {"resume", "cv", "curriculum", "vitae", "linkedin", "github", "education",
-                "address", "contact", "email", "gmail", "phone", "mobile", "location", "profile"}
+IGNORE_WORDS = {
+    "resume", "cv", "curriculum", "vitae", "linkedin", "github", "education",
+    "address", "contact", "email", "gmail", "phone", "mobile", "location", "profile"
+}
 
 def extract_email(text):
-    email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-    match = re.search(email_pattern, text)
-    return match.group() if match else "Not Found"
+    match = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", text)
+    return match.group().strip() if match else "Not Found"
+
 
 def extract_name(text):
-    lines = text.strip().split("\n")
-    for line in lines[:10]:
-        line_clean = line.strip()
-        # Match spaced-out uppercase letters (e.g., "N I K H I L   P A T I L")
-        spaced_match = re.match(r"^([A-Z]\s*){3,}", line_clean)
-        if spaced_match:
-            words = re.split(r'\s{2,}', line_clean)  # Split on double+ spaces
-            name_parts = [''.join(w.split()) for w in words]  # Remove single spaces between letters
-            return ' '.join(name_parts).title()
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    
+    for line in lines[:15]:  # Focus on top 15 lines
+        if any(keyword in line.lower() for keyword in ['link', 'skill', 'email', 'summary']):
+            continue  # Skip unwanted headers
 
-        # Otherwise, match normally capitalized names
-        cleaned_line = re.sub(r"[^a-zA-Z\s]", "", line)
-        words = cleaned_line.split()
-        filtered = [word for word in words if word.lower() not in IGNORE_WORDS]
-        if len(filtered) >= 2:
-            return ' '.join(filtered[:2])
+        # Match ALL-CAPS name
+        if re.fullmatch(r"[A-Z\s]{5,30}", line) and " " in line:
+            return ' '.join(line.split()).title()
+
+        # Match capitalized names
+        words = line.split()
+        if 1 < len(words) <= 3 and all(w[0].isupper() for w in words if w.isalpha()):
+            return line.strip()
 
     return "Not Found"
+
+
 
 def extract_skills(text):
     found_skills = set()
     text_lower = text.lower()
-    IGNORE_TERMS = {"environment", "team", "communication", "management", "skill", "abilities", "working", "experience"}
+    ignore_terms = {"environment", "team", "communication", "management", "skill", "abilities", "working", "experience"}
 
-    # Search for "Skills" section
-    skills_match = re.search(r"(skills|technical skills|strengths|core competencies)[\s:]*([\w\s,]+)", text_lower, re.IGNORECASE)
-    if skills_match:
-        skill_section = skills_match.group(2)
-        extracted = [skill.strip() for skill in skill_section.split(",") if skill.strip()]
-        found_skills.update(
-            skill for skill in extracted 
-            if 1 <= len(skill.split()) <= 3 and skill.lower() in {s.lower() for s in SKILLS} and skill.lower() not in IGNORE_TERMS
-        )
+    # Match defined skills
+    for skill in SKILLS:
+        if re.search(rf"\b{re.escape(skill.lower())}\b", text_lower):
+            if not any(term in skill.lower() for term in ignore_terms):
+                found_skills.add(skill)
 
-    # Match all predefined skills in entire text
-    found_skills.update(
-        skill for skill in SKILLS 
-        if skill.lower() in text_lower and skill.lower() not in IGNORE_TERMS
-    )
+    return ", ".join(sorted(found_skills)) if found_skills else "Not Found"
 
-    return ", ".join(found_skills) if found_skills else "Not Found"
 
 def extract_keywords(text):
     return {
@@ -75,12 +68,12 @@ def extract_keywords(text):
         "Skills": extract_skills(text),
     }
 
-# Test function
+# Optional Test Code
 if __name__ == "__main__":
-    sample_resume = """N I K H I L   P A T I L
-    nikhil@gmail.com
-    Technical Skills: Python, Java, SQL, Machine Learning, Data Science, AWS
-    Seeking a career in IT and AI."""
+    sample_resume = """DIPESH RAWOOL
+    rawooldipesh0@gmail.com
+    Tech Skills: Python, Java, SQL, Machine Learning, React, AI
+    Looking for a role in backend development or AI research."""
     
     extracted_info = extract_keywords(sample_resume)
     print("Extracted Info:", extracted_info)

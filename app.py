@@ -10,6 +10,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from utils import preprocess_text  
 from extract_keywords import extract_keywords  
 import nltk
+from datetime import timedelta  # ✅ Import this at the top if not already
+
 
 # Download punkt if not already present
 try:
@@ -21,6 +23,10 @@ except LookupError:
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
+
+# ✅ Set session timeout to 30 minutes
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -97,6 +103,9 @@ def register():
 # User Login Route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    logout_user()               # ✅ Ensure old session is cleared
+    session.clear()             # ✅ Clear any leftover session data
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -104,12 +113,14 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
+            # session.permanent = True  # ✅ Enables the session timeout logic
             flash("Login successful!", "success")
             return redirect(url_for('home'))
         else:
             flash("Invalid credentials. Try again.", "danger")
     
     return render_template('login.html')
+
 
 # User Logout Route
 @app.route('/logout')
@@ -122,6 +133,8 @@ def logout():
 
 
 # ✅ Resume Prediction Route (With AI Suggestions)
+import pdfplumber  # ✅ Add this to your imports if not already
+
 @app.route('/predict', methods=['POST'])
 @login_required
 def predict():
@@ -138,8 +151,24 @@ def predict():
     pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(pdf_path)
 
-    # Extract text from PDF
+    # ✅ Extract text using pdfplumber
+    def extract_text_from_pdf(pdf_path):
+        text = ""
+        try:
+            with pdfplumber.open(pdf_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+        except Exception as e:
+            print("Error extracting text from PDF:", e)
+        return text
+
     text = extract_text_from_pdf(pdf_path)
+
+    # ✅ Optional: Print first 10 lines to debug extraction
+    print("Top 10 lines of resume:\n", "\n".join(text.splitlines()[:10]))
+
     if not text.strip():
         flash("The uploaded PDF contains no readable text.", "danger")
         return redirect(url_for('home'))
@@ -155,8 +184,8 @@ def predict():
     job_role_probs = job_role_model.predict_proba(resume_features)[0]
     top_3_indices = np.argsort(job_role_probs)[-3:][::-1]  # Get top 3 roles
     top_3_roles = [job_role_model.classes_[i] for i in top_3_indices]
-    job_roles_str = ', '.join(top_3_roles)  # Store as a string in DB
-    
+    job_roles_str = ', '.join(top_3_roles)
+
     # Extract Keywords (Name, Email, Skills, Education)
     extracted_info = extract_keywords(text)
     name = extracted_info.get("Name", "Not Found")
@@ -164,7 +193,7 @@ def predict():
     skills = extracted_info.get("Skills", "Not Found")
     education = extracted_info.get("Education", "Not Found")
 
-    # ✅ Store analysis in the database
+    # Store analysis in the database
     new_analysis = ResumeAnalysis(
         user_id=current_user.id,
         ats_score=ats_score,
@@ -179,7 +208,7 @@ def predict():
 
     flash("Resume analysis saved successfully!", "success")
 
-    # ✅ Generate AI Resume Suggestions
+    # AI Resume Suggestions
     ai_prompt = f"""
     This is a candidate's resume:
     ---
@@ -201,6 +230,8 @@ def predict():
         extracted_info=extracted_info,
         resume_suggestions=resume_suggestions
     )
+
+
 
 @app.route('/generate_suggestions', methods=['GET'])
 @login_required
