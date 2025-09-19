@@ -243,6 +243,29 @@
             </div>
 
         {% endif %}
+
+                <!-- Separator: End of AI Suggestions/Results, Start of Job Search Section -->
+                        <hr>
+            <h3>🔍 Search Jobs</h3>
+            <form action="/search_jobs" method="GET">   <!-- ✅ switched to GET -->
+                <input type="text" name="job_role" placeholder="Enter Job Role" required>
+                <button type="submit">Search Job</button>
+            </form>
+
+            {% if job_results %}
+            <h3>Latest Jobs</h3>
+            <ul>
+                {% for job in job_results %}
+                <li>
+                    <strong>{{ job.title }}</strong> at {{ job.company }} ({{ job.location }})
+                    - <a href="{{ job.link }}" target="_blank">Apply</a>  <!-- ✅ fixed apply link -->
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <hr>
+
+
     </div>
 
     <!-- JavaScript for AI Suggestions -->

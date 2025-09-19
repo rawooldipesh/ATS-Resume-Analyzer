@@ -42,7 +42,7 @@ job_role_model = joblib.load('job_role_model.pkl')
 tfidf_vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # ✅ Configure Google AI API
-genai.configure(api_key="AIzaSyACL2Z0NLEOQq1WXmKSAodZqJXnEcYcu90") 
+genai.configure(api_key="AIzaSyDE8rA0fq6MtlBWHoRnbRnoAwsGMKEwljA") 
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 # User Model
@@ -288,6 +288,56 @@ def extract_text_from_pdf(pdf_path):
     except Exception as e:
         print("Error extracting text from PDF:", e)
     return text
+
+
+from serpapi import GoogleSearch
+
+# 🔑 Your SerpApi key
+SERP_API_KEY = "8e8ff9e8eae04c7ad39f26ae2b4645aef9fa4bbd74e44037b711a23eaf5efa69"
+
+@app.route("/search_jobs", methods=["GET"])
+def search_jobs():
+    job_role = request.args.get("job_role")
+
+    params = {
+        "engine": "google_jobs",
+        "q": job_role,
+        "location": "India",
+        "api_key": SERP_API_KEY
+    }
+
+    search = GoogleSearch(params)
+    results = search.get_dict()
+
+    job_listings = []
+    if "jobs_results" in results:
+        for job in results["jobs_results"][:5]:  # top 5 jobs
+            # ✅ Always prefer apply_link if available
+            apply_link = job.get("link", "#")
+
+            if "apply_options" in job:
+                if isinstance(job["apply_options"], list) and len(job["apply_options"]) > 0:
+                    apply_link = job["apply_options"][0].get("link", apply_link)
+
+            # If link is relative (like "/search_jobs?..."), skip it
+            if apply_link.startswith("/"):
+                apply_link = "#"
+
+            job_listings.append({
+                "title": job.get("title", "N/A"),
+                "company": job.get("company_name", "N/A"),
+                "location": job.get("location", "N/A"),
+                "link": apply_link
+            })
+    else:
+        job_listings.append({"title": "No jobs found", "company": "-", "location": "-", "link": "#"})
+
+    return render_template("index.html", job_results=job_listings)
+
+
+
+
+
 
 
 if __name__ == '__main__':
