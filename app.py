@@ -42,7 +42,7 @@ job_role_model = joblib.load('job_role_model.pkl')
 tfidf_vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # ✅ Configure Google AI API
-genai.configure(api_key="AIzaSyDE8rA0fq6MtlBWHoRnbRnoAwsGMKEwljA") 
+genai.configure(api_key="AIzaSyBBhZM_cQR1x-cbaV-e_-XW80lhfsUrvxo") 
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 # User Model
@@ -133,7 +133,7 @@ def logout():
 
 
 # ✅ Resume Prediction Route (With AI Suggestions)
-import pdfplumber  # ✅ Add this to your imports if not already
+import pdfplumber  
 
 @app.route('/predict', methods=['POST'])
 @login_required
